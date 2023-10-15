@@ -9,10 +9,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "antd": "^5.10.1",
     "axios": "^1.4.0",
     "node-sass": "^7.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-monaco-editor": "^0.54.0",
     "react-router-dom": "^6.13.0",
     "sass-loader": "^13.3.2",
     "svgo": "^3.0.2",
