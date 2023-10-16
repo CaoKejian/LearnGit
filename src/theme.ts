@@ -1,10 +1,11 @@
 export default {
   components: {
-    Layout: {
-      colorBgHeader: '#ff7746'
+    Switch:{
+      colorPrimary: '#1677ff',
+      colorPrimaryHover: '#4096ff'
     }
   },
   token: {
-    colorPrimary: '#ff7746'
+    colorPrimary: '#e7f8ff'
   }
 }
