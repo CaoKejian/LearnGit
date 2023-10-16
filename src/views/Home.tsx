@@ -27,7 +27,9 @@ const Home: FC<IProps> = () => {
         onClick={(e) => changeTheme(e)}
       />
     </div>
-    <Editor />
+    <div className={s.editor}>
+      <Editor />
+    </div>
   </div>
   )
 }

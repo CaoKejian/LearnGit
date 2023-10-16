@@ -2,9 +2,8 @@ export const dayTheme = {
   components: {
     Switch:{
       colorPrimary: '#1677ff',
-      colorPrimaryHover: '#efefef',
+      colorPrimaryHover: '#4096ff',
       motionDurationMid: '0.5s',
-      handleBg: '#b8b5b5'
     }
   },
   token: {
