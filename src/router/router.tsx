@@ -1,5 +1,5 @@
 import { lazy } from 'react'
-import { Navigate, RouteObject } from 'react-router-dom'
+import { RouteObject } from 'react-router-dom'
 
 const Home = lazy(() => import('../views/Home'))
 
