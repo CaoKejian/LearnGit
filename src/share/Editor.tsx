@@ -15,7 +15,7 @@ const Editor: FC<IProps> = ({ editorTheme }) => {
   }
   const darkTheme = {
     'fontColor': '#bb9bf3',
-    'editorBg': '#141f27',
+    'editorBg': '#1e1e1e',
     'cursorBg': '#6382e9',
     'lineHeightColor': '#272b33',
     'lineColor': '#ffffff'
@@ -36,7 +36,6 @@ const Editor: FC<IProps> = ({ editorTheme }) => {
     cursorSmoothCaretAnimation: true,
   }
   useEffect(() => {
-    console.log(editorTheme)
     if(editorTheme === 'day'){
       setTheme(dayTheme)
     }else{
