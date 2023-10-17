@@ -12,6 +12,19 @@ const Editor: FC<IProps> = () => {
   const onChange = (e: string) => {
     setCode(e)
   }
+  const darkTheme = {
+    'fontColor': '#bb9bf3',
+    'editorBg': '#ffffff',
+    'cursorBg': '#6382e9',
+    'lineHeightColor': '#272b33',
+  }
+  const dayTheme = {
+    'fontColor': '#bb9bf3',
+    'editorBg': '#ffffff',
+    'cursorBg': '#6382e9',
+    'lineHeightColor': '#e7f8ff',
+  }
+  const [theme, setTheme] = useState(dayTheme)
   const options:{} = {
     selectOnLineNumbers: true,
     fontSize: 16,
@@ -25,10 +38,10 @@ const Editor: FC<IProps> = () => {
       inherit: true,
       rules: [],
       colors: {
-        'editor.foreground': '#bb9bf3',
-        'editor.background': '#141f27',
-        'editorCursor.foreground': '#6382e9',
-        'editor.lineHighlightBackground': '#272b33',
+        'editor.foreground': theme.fontColor,
+        'editor.background': theme.editorBg,
+        'editorCursor.foreground': theme.cursorBg,
+        'editor.lineHighlightBackground': theme.lineHeightColor,
       }
     });
     monaco.editor.setTheme('BlackTheme')
@@ -41,8 +54,6 @@ const Editor: FC<IProps> = () => {
   return (
     <div className={s.container}>
       <MonacoEditor
-        width="800"
-        height="200"
         language="javascript"
         theme='BlackTheme'
         value={code}

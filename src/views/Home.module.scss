@@ -29,6 +29,35 @@
     }
   }
   .editor{
-    margin-top: 1rem;
+    width: 82.5rem;
+    height: 52.5rem;
+    display: flex;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border-radius: 1rem;
+    border: 2px solid #dedede;
+    background: var(--body-bg);
+    box-shadow: 10px 10px 50px #e3e3e3;
+    .left{
+      width: 20.625rem;
+      background: var(--left-bg);
+      border-right: 1px solid #dcecf3;
+    }
+    .right{
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      .right_top{
+        height: 80%;
+      }
+      .right_bottom{
+        padding-top: 1rem;
+        box-sizing: border-box;
+        height: 20%;
+        border-top: 1px solid #dedede;
+      }
+    }
   }
 }

@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import type { FC, ReactNode } from 'react'
 import Editor from '../share/Editor'
-import { Button, Switch } from 'antd'
+import { Switch } from 'antd'
 import s from './Home.module.scss'
 import { AppContext } from '../share/AppContext'
 
@@ -28,7 +28,13 @@ const Home: FC<IProps> = () => {
       />
     </div>
     <div className={s.editor}>
-      <Editor />
+      <div className={s.left}>left</div>
+      <div className={s.right}>
+        <div className={s.right_top}>hahaha</div>
+        <div className={s.right_bottom}>
+          <Editor />
+        </div>
+      </div>
     </div>
   </div>
   )
