@@ -5,27 +5,30 @@ import s from './Editor.module.scss'
 
 interface IProps {
   children?: ReactNode
+  editorTheme: String
 }
 
-const Editor: FC<IProps> = () => {
+const Editor: FC<IProps> = ({ editorTheme }) => {
   const [code, setCode] = useState("// 在这里编写你的代码~");
   const onChange = (e: string) => {
     setCode(e)
   }
   const darkTheme = {
     'fontColor': '#bb9bf3',
-    'editorBg': '#ffffff',
+    'editorBg': '#141f27',
     'cursorBg': '#6382e9',
     'lineHeightColor': '#272b33',
+    'lineColor': '#ffffff'
   }
   const dayTheme = {
     'fontColor': '#bb9bf3',
     'editorBg': '#ffffff',
     'cursorBg': '#6382e9',
     'lineHeightColor': '#e7f8ff',
+    'lineColor': '#bea2f0'
   }
   const [theme, setTheme] = useState(dayTheme)
-  const options:{} = {
+  const options: {} = {
     selectOnLineNumbers: true,
     fontSize: 16,
     cursorWidth: 3,
@@ -33,6 +36,15 @@ const Editor: FC<IProps> = () => {
     cursorSmoothCaretAnimation: true,
   }
   useEffect(() => {
+    console.log(editorTheme)
+    if(editorTheme === 'day'){
+      setTheme(dayTheme)
+    }else{
+      setTheme(darkTheme)
+    }
+  }, [editorTheme])
+  useEffect(() => {
+    console.log('theme 变了')
     monaco.editor.defineTheme('BlackTheme', {
       base: 'vs',
       inherit: true,
@@ -42,11 +54,12 @@ const Editor: FC<IProps> = () => {
         'editor.background': theme.editorBg,
         'editorCursor.foreground': theme.cursorBg,
         'editor.lineHighlightBackground': theme.lineHeightColor,
+        'editorLineNumber.activeForeground': theme.lineColor
       }
     });
     monaco.editor.setTheme('BlackTheme')
-  }, [])
-  const editorDidMount = (editor:any) => {
+  }, [theme])
+  const editorDidMount = (editor: any) => {
     editor.onDidBlurEditorWidget(() => {
       console.log('test')
     })

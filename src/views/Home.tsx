@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import Editor from '../share/Editor'
 import { Switch } from 'antd'
@@ -10,9 +10,14 @@ interface IProps {
 }
 
 const Home: FC<IProps> = () => {
-  localStorage.setItem('theme', "vs-dark")
+  const [editorTheme, setEditorTheme] = useState('day')
   const changeTheme = (e: boolean) => {
     doSomething(e)
+    if(!e){
+      setEditorTheme('dark')
+    }else{
+      setEditorTheme('day')
+    } 
   }
   const { doSomething } = React.useContext(AppContext);
 
@@ -32,7 +37,7 @@ const Home: FC<IProps> = () => {
       <div className={s.right}>
         <div className={s.right_top}>hahaha</div>
         <div className={s.right_bottom}>
-          <Editor />
+          <Editor editorTheme={editorTheme}/>
         </div>
       </div>
     </div>

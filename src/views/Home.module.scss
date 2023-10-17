@@ -37,13 +37,13 @@
     left: 50%;
     transform: translate(-50%,-50%);
     border-radius: 1rem;
-    border: 2px solid #dedede;
+    border: 1px solid var(--body-borderColor);
     background: var(--body-bg);
-    box-shadow: 10px 10px 50px #e3e3e3;
+    box-shadow: 10px 10px 50px var(--body-boxShadow);
     .left{
       width: 20.625rem;
       background: var(--left-bg);
-      border-right: 1px solid #dcecf3;
+      border-right: 1px solid var(--body-borderColor);
     }
     .right{
       flex: 1;
@@ -57,6 +57,7 @@
         box-sizing: border-box;
         height: 20%;
         border-top: 1px solid #dedede;
+        border: 1px solid var(--body-borderColor);
       }
     }
   }

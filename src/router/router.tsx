@@ -6,7 +6,7 @@ const Home = lazy(() => import('../views/Home'))
 const routes: RouteObject[] = [
   {
     path: '/',
-    element: <Navigate to='/home'/>
+    element: <Home />
   },
   {
     path: '/home',
