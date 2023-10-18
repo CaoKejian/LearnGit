@@ -9,7 +9,7 @@ function title {
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 title "正在打包"
-# npm run build
+npm run build
 echo "${YELLOW}打包完成"
 
 title "删除远端文件"
