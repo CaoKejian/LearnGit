@@ -18,24 +18,38 @@ const Home: FC<IProps> = () => {
   const [editorTheme, setEditorTheme] = useState('day')
   const changeTheme = (e: boolean) => {
     doSomething(e)
-    if(!e){
+    if (!e) {
       setEditorTheme('dark')
-    }else{
+    } else {
       setEditorTheme('day')
-    } 
+    }
   }
   const { doSomething } = React.useContext(AppContext)
 
   const [chatList, setChatList] = useState<chatListType[]>([])
   useEffect(() => {
     setChatList([
-      {id:1, name:'123',time:'2023-10-19'},
-      {id:2, name:'456',time:'2023-10-29'},
-      {id:3, name:'xx',time:'2023-10-09'},
+      { id: 1, name: '123', time: '2023-10-19' },
+      { id: 2, name: '456', time: '2023-10-29' },
+      { id: 3, name: 'xx', time: '2023-10-09' },
     ])
-  },[])
-  const content = '在b站看到特地来掘金关注！实现思路很棒。但我有个问题:steps函数第二个参数jump-one是啥，MDN上提示只有start和end两个关键词可选。使用jump-one在谷歌浏览器上非法不生效'
+  }, [])
+  const content = '欢迎来到小丽（机器人）的对话。让小丽来教你学习Git并开启新的旅程吧~'
   const code = 'git ( num ) => num + 1'
+
+  const addList = (num: number) => {
+    if(num === 1){
+      setChatList((p) => [
+        { id: 4, name: '选择一个模块', time: '2023-10-19' },
+        ...p,
+      ])
+    }else{
+      setChatList((p) => [
+        { id: 4, name: 'git之旅', time: '2023-10-19' },
+        ...p,
+      ])
+    }
+  }
   return (<div className={s.wrapper}>
     <div className={s.switch}>
       <span>主题</span>
@@ -50,15 +64,15 @@ const Home: FC<IProps> = () => {
     <div className={s.editor}>
       <div className={s.left}>
         <Header />
-        <Body chatList={chatList}/>
-        <Footer />
+        <Body chatList={chatList} />
+        <Footer addList={addList}/>
       </div>
       <div className={s.right}>
         <div className={s.right_top}>
-          <RightBody content={content} code={code}/>
+          <RightBody content={content} code={code} />
         </div>
         <div className={s.right_bottom}>
-          <Editor editorTheme={editorTheme}/>
+          <Editor editorTheme={editorTheme} />
         </div>
       </div>
     </div>

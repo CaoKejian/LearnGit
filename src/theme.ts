@@ -6,10 +6,11 @@ export const dayTheme = {
       motionDurationMid: '0.5s',
     },
     Button:{
-      colorPrimaryHover: '#000000',
+      colorPrimaryHover: '#3e8297',
       textHoverBg: '#000000',
       defaultBg:'#ffffff',
       defaultColor:'#000000',
+      colorPrimary:"#3e8297"
     }
   },
   token: {
@@ -23,10 +24,16 @@ export const darkTheme = {
       colorPrimary: '#1c94aa',
       motionDurationMid: '0.5s',
     },
+    Modal:{
+      contentBg: '#1e1e1e',
+      headerBg: '#1e1e1e',
+      titleColor: '#ffffff',
+      colorText: '#ffffff'
+    },
     Button:{
-      colorPrimaryHover: '#ffffff',
+      colorPrimaryHover: '#3e8297',
       textHoverBg: '#000000',
-      defaultBg:'#1e1e1e',
+      defaultBg:'#000000',
       defaultColor:'#ffffff',
       defaultBorderColor:'#1e1e1e',
     }
