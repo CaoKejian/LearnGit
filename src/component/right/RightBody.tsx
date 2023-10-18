@@ -21,7 +21,7 @@ const RightBody: FC<IProps> = ({ content, code }) => {
     const h1 = document.querySelector(`.${s.container}`)
     if (!h1) return
     const textLength = h1.textContent?.length || 0
-    setTime(0.1 * textLength + 0.3)
+    setTime(0.1 * textLength + 1)
     h1.innerHTML = h1.textContent!
       .replace(/\S/g, "<span>$&</span>")
       .replace(/\s/g, "<span>&nbsp;</span>")
@@ -70,10 +70,12 @@ const RightBody: FC<IProps> = ({ content, code }) => {
         })
       }
     }
-    if (obj.length > 0) {
-      setCodeList(obj)
+    if (obj.length > 0 && time !== 0) {
+      setTimeout(() => {
+        setCodeList(obj)
+      }, time * 1000)
     }
-  }, [code, setCodeList])
+  }, [code, setCodeList, time])
   useEffect(() => {
     console.log(codeList)
   }, [codeList])
@@ -90,14 +92,21 @@ const RightBody: FC<IProps> = ({ content, code }) => {
           {content}
         </span>
       </div>
-      {code ?
+      {codeList?.length !== 0 ?
         <div className={s.code}>
           {
             codeList.length !== 0 && codeList.map((item, index) => {
               return <span key={index} style={{ color: item.color }}>{item.content} </span>
             })
           }
-        </div> : null
+        </div> : <div className={s.uncode}>
+          <div>正在加载</div>
+          <span className={s.loadingdotscontainer}>
+            <span className={s.loadingdot}></span>
+            <span className={s.loadingdot}></span>
+            <span className={s.loadingdot}></span>
+          </span>
+        </div>
       }
     </div>
   </>

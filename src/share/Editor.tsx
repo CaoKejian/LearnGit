@@ -43,7 +43,6 @@ const Editor: FC<IProps> = ({ editorTheme }) => {
     }
   }, [editorTheme])
   useEffect(() => {
-    console.log('theme 变了')
     monaco.editor.defineTheme('BlackTheme', {
       base: 'vs',
       inherit: true,
