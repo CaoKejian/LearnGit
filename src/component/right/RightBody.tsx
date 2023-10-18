@@ -1,14 +1,21 @@
 import { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import s from './RightBody.module.scss'
+import { message } from 'antd'
+
 interface IProps {
   children?: ReactNode
   content: string
   code?: string
 }
-
+interface objType {
+  content: string
+  color: string
+}
 const RightBody: FC<IProps> = ({ content, code }) => {
   const [time, setTime] = useState(0) // time 时间后动画结束
+  const [codeList, setCodeList] = useState<objType[]>([]) // time 时间后动画结束
+  const [messageApi, contextHolder] = message.useMessage()
 
   useEffect(() => {
     const h1 = document.querySelector(`.${s.container}`)
@@ -31,7 +38,47 @@ const RightBody: FC<IProps> = ({ content, code }) => {
     })
   }, [time])
 
-  return (
+  const colorMap = {
+    'git': '#e18736',
+    'alpha': '#76bcf7',
+    'operator': '#e18736',
+    'singleChar': '#a5d7fd'
+  }
+
+  useEffect(() => {
+    if (!code) return
+    const word = code.split(' ')
+    let obj: objType[] = []
+    const pushToObj = (content: string, color: string) => {
+      let temp = { content: content, color: color }
+      obj.push(temp)
+    }
+    for (let i = 0; i < word.length; i++) {
+      if (word[i] === 'git') {
+        pushToObj(word[i], colorMap['git'])
+      } else if (word[i] && /^[a-zA-Z]*$/.test(word[i])) {
+        pushToObj(word[i], colorMap['alpha'])
+      } else if (word[i] && /^[+\-*/=><]*$/.test(word[i])) {
+        pushToObj(word[i], colorMap['operator'])
+      } else if (word[i] && word[i].length === 1) {
+        pushToObj(word[i], colorMap['singleChar'])
+      } else {
+        if (!word[i]) return;
+        messageApi.open({
+          type: 'error',
+          content: `有不合格的代码格式${word[i]}`,
+        })
+      }
+    }
+    if (obj.length > 0) {
+      setCodeList(obj)
+    }
+  }, [code, setCodeList])
+  useEffect(() => {
+    console.log(codeList)
+  }, [codeList])
+  return (<>
+    {contextHolder}
     <div className={s.wrapper}>
       <div className={s.message}>
         <div className={s.actor}>
@@ -41,10 +88,20 @@ const RightBody: FC<IProps> = ({ content, code }) => {
           style={{ animationDelay: `${time * 1000}s` }}
         >
           {content}
-          
         </span>
       </div>
+      {code ?
+        <div className={s.code}>
+          {
+            codeList.length !== 0 && codeList.map((item, index) => {
+              return <span key={index} style={{ color: item.color }}>{item.content} </span>
+            })
+          }
+        </div> : null
+      }
     </div>
+  </>
+
   )
 }
 

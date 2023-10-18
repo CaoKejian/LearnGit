@@ -33,15 +33,15 @@
   position: relative;
   width: 65%;
   word-wrap: break-word;
-  background: #f2f2f2;
-  border: 1px solid #e5e5e5;
+  background: var(--message-bg);
+  border: 1px solid var(--message-border);
   border-radius: 0.5rem;
   &::after{
     content: '';
     display: inline-block;
     width: 3px;
     height: 1rem;
-    background-color: #000;
+    background-color: var(--cursor-color);
     border-radius: 2px;
     margin-left: 0.5rem;
   }
@@ -73,4 +73,13 @@
   to {
     width: 1rem;
   }
+}
+.code{
+  margin-top: 0.5rem;
+  width: 65%;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  background: var(--code-bg);
+  border: 1px solid var(--message-border);
 }

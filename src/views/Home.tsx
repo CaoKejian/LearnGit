@@ -35,9 +35,7 @@ const Home: FC<IProps> = () => {
     ])
   },[])
   const content = '在b站看到特地来掘金关注！实现思路很棒。但我有个问题:steps函数第二个参数jump-one是啥，MDN上提示只有start和end两个关键词可选。使用jump-one在谷歌浏览器上非法不生效'
-  const code = {
-    
-  }
+  const code = 'git ( num ) => num + 1'
   return (<div className={s.wrapper}>
     <div className={s.switch}>
       <span>主题</span>
@@ -57,7 +55,7 @@ const Home: FC<IProps> = () => {
       </div>
       <div className={s.right}>
         <div className={s.right_top}>
-          <RightBody content={content}/>
+          <RightBody content={content} code={code}/>
         </div>
         <div className={s.right_bottom}>
           <Editor editorTheme={editorTheme}/>
