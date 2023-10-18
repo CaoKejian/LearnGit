@@ -16,7 +16,11 @@ interface IProps {
 
 const Home: FC<IProps> = () => {
   const [editorTheme, setEditorTheme] = useState('day')
+  const [defaultSwitch, setDefaultSwitch] = useState<boolean>(true)
+
   const changeTheme = (e: boolean) => {
+    setDefaultSwitch(!defaultSwitch)
+    localStorage.setItem('git_theme', JSON.stringify(e))
     doSomething(e)
     if (!e) {
       setEditorTheme('dark')
@@ -28,20 +32,25 @@ const Home: FC<IProps> = () => {
 
   const [chatList, setChatList] = useState<chatListType[]>([])
   useEffect(() => {
+    const theme = JSON.parse(localStorage.getItem('git_theme') as string)
+    if (!theme) {
+      setDefaultSwitch(false)
+      setEditorTheme('dark')
+    }
     setChatList([
       { id: 1, name: '123', time: '2023-10-19' },
     ])
-  }, [])
+  }, [defaultSwitch])
   const content = '欢迎来到小丽（机器人）的对话。让小丽来教你学习Git并开启新的旅程吧~'
   const code = 'git ( num ) => num + 1'
 
   const addList = (num: number) => {
-    if(num === 1){
+    if (num === 1) {
       setChatList((p) => [
         { id: 4, name: '选择一个模块', time: '2023-10-19' },
         ...p,
       ])
-    }else{
+    } else {
       setChatList((p) => [
         { id: 5, name: 'git之旅', time: '2023-10-19' },
         ...p,
@@ -55,7 +64,7 @@ const Home: FC<IProps> = () => {
         className={s.switchModal}
         checkedChildren={<svg className={s.svgDay}><use xlinkHref='#day'></use></svg>}
         unCheckedChildren={<svg className={s.svgDark}><use xlinkHref='#dark'></use></svg>}
-        defaultChecked
+        checked={defaultSwitch} 
         onClick={(e) => changeTheme(e)}
       />
     </div>
@@ -63,7 +72,7 @@ const Home: FC<IProps> = () => {
       <div className={s.left}>
         <Header />
         <Body chatList={chatList} />
-        <Footer addList={addList}/>
+        <Footer addList={addList} />
       </div>
       <div className={s.right}>
         <div className={s.right_top}>

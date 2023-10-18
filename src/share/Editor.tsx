@@ -36,6 +36,12 @@ const Editor: FC<IProps> = ({ editorTheme }) => {
     cursorSmoothCaretAnimation: true,
   }
   useEffect(() => {
+    const theme = JSON.parse(localStorage.getItem('git_theme')as string)
+    if(!theme){
+      return setTheme(darkTheme)
+    }else if(theme){
+      return setTheme(dayTheme)
+    }
     if(editorTheme === 'day'){
       setTheme(dayTheme)
     }else{
