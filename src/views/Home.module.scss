@@ -63,7 +63,10 @@
       border-top-right-radius: 1rem;
       border-bottom-right-radius: 1rem;
       .right_top{
+        flex: 1;
         height: 80%;
+        max-height: 80%;
+        overflow: scroll;
         padding: 1rem;
         box-sizing: border-box;
       }

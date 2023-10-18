@@ -8,6 +8,7 @@ import Header from '../component/left/Header'
 import Footer from '../component/left/Footer'
 import Body from '../component/left/Body'
 import { chatListType } from '../component/type'
+import RightBody from '../component/right/RightBody'
 
 interface IProps {
   children?: ReactNode
@@ -33,6 +34,10 @@ const Home: FC<IProps> = () => {
       {id:3, name:'xx',time:'2023-10-09'},
     ])
   },[])
+  const content = '在b站看到特地来掘金关注！实现思路很棒。但我有个问题:steps函数第二个参数jump-one是啥，MDN上提示只有start和end两个关键词可选。使用jump-one在谷歌浏览器上非法不生效'
+  const code = {
+    
+  }
   return (<div className={s.wrapper}>
     <div className={s.switch}>
       <span>主题</span>
@@ -51,7 +56,9 @@ const Home: FC<IProps> = () => {
         <Footer />
       </div>
       <div className={s.right}>
-        <div className={s.right_top}>hahaha</div>
+        <div className={s.right_top}>
+          <RightBody content={content}/>
+        </div>
         <div className={s.right_bottom}>
           <Editor editorTheme={editorTheme}/>
         </div>
