@@ -32,7 +32,7 @@ const Home: FC<IProps> = () => {
       {id:2, name:'456',time:'2023-10-29'},
       {id:3, name:'xx',time:'2023-10-09'},
     ])
-  },[chatList])
+  },[])
   return (<div className={s.wrapper}>
     <div className={s.switch}>
       <span>主题</span>
