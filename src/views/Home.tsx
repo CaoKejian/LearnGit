@@ -30,8 +30,6 @@ const Home: FC<IProps> = () => {
   useEffect(() => {
     setChatList([
       { id: 1, name: '123', time: '2023-10-19' },
-      { id: 2, name: '456', time: '2023-10-29' },
-      { id: 3, name: 'xx', time: '2023-10-09' },
     ])
   }, [])
   const content = '欢迎来到小丽（机器人）的对话。让小丽来教你学习Git并开启新的旅程吧~'
@@ -45,7 +43,7 @@ const Home: FC<IProps> = () => {
       ])
     }else{
       setChatList((p) => [
-        { id: 4, name: 'git之旅', time: '2023-10-19' },
+        { id: 5, name: 'git之旅', time: '2023-10-19' },
         ...p,
       ])
     }
