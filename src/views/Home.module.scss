@@ -45,10 +45,13 @@
       height: 100%;
       background: var(--left-bg);
       border: 1px solid var(--body-borderColor);
-      padding: 1rem;
+      padding: 1.5rem;
       box-sizing: border-box;
       border-top-left-radius: 1rem;
       border-bottom-left-radius: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
     .right{
       flex: 1;

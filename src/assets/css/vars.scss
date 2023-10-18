@@ -7,6 +7,12 @@
   --left-bg:#e7f8ff;
   --body-boxShadow: #e3e3e3;
   --body-borderColor: #dedede;
+  --button-hover-color: #1e1e1e;
+  --li-bg:#ffffff;
+  --li-hover-bg:#f3f3f3;
+  --li-border-color:#1c94aa;
+  --li-name-font-color:#000000;
+  --li-time-font-color:#a6a6a6;
 }
 .dark {
   --home-bg: #151515;
@@ -17,4 +23,10 @@
   --left-bg:#1b262a;
   --body-boxShadow: #141414;
   --body-borderColor: #494949;
+  --button-hover-color: #ffffff;
+  --li-bg: #1e1e1e;
+  --li-hover-bg:#323232;
+  --li-border-color:#1c94aa;
+  --li-name-font-color:#bbbbbb;
+  --li-time-font-color:#a6a6a6;
 }
