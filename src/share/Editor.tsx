@@ -2,17 +2,28 @@ import { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import MonacoEditor, { monaco } from "react-monaco-editor"
 import s from './Editor.module.scss'
+import {Button} from 'antd'
 
 interface IProps {
   children?: ReactNode
   editorTheme: String
+  next: boolean
+  updateNext: (isNext:boolean) => void
 }
 
-const Editor: FC<IProps> = ({ editorTheme }) => {
+const Editor: FC<IProps> = ({ editorTheme, next, updateNext }) => {
   const [code, setCode] = useState("// 在这里编写你的代码~");
   const onChange = (e: string) => {
     setCode(e)
   }
+  const clickSubmit = () => {
+    console.log(code)
+    setCode('')
+  }
+  const clickNext = () => {
+    updateNext(true)
+  }
+
   const darkTheme = {
     'fontColor': '#bb9bf3',
     'editorBg': '#1e1e1e',
@@ -36,15 +47,15 @@ const Editor: FC<IProps> = ({ editorTheme }) => {
     cursorSmoothCaretAnimation: true,
   }
   useEffect(() => {
-    const theme = JSON.parse(localStorage.getItem('git_theme')as string)
-    if(!theme){
+    const theme = JSON.parse(localStorage.getItem('git_theme') as string)
+    if (!theme) {
       return setTheme(darkTheme)
-    }else if(theme){
+    } else if (theme) {
       return setTheme(dayTheme)
     }
-    if(editorTheme === 'day'){
+    if (editorTheme === 'day') {
       setTheme(dayTheme)
-    }else{
+    } else {
       setTheme(darkTheme)
     }
   }, [editorTheme])
@@ -64,6 +75,9 @@ const Editor: FC<IProps> = ({ editorTheme }) => {
     monaco.editor.setTheme('BlackTheme')
   }, [theme])
   const editorDidMount = (editor: any) => {
+    editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, function() {
+      clickSubmit()
+    })
     editor.onDidBlurEditorWidget(() => {
       console.log('test')
     })
@@ -78,6 +92,10 @@ const Editor: FC<IProps> = ({ editorTheme }) => {
         onChange={onChange}
         editorDidMount={editorDidMount}
       />
+      <div className={s.bt}>
+        <Button type='primary' onClick={clickSubmit}>发送</Button>
+        <Button type='primary' className={s.next} disabled={next} onClick={clickNext}>下一问</Button>
+      </div>
     </div>
   )
 }

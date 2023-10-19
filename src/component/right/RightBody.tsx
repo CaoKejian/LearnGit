@@ -7,12 +7,13 @@ interface IProps {
   children?: ReactNode
   content: string
   code?: string
+  updateNext: (isNext: boolean) => void
 }
 interface objType {
   content: string
   color: string
 }
-const RightBody: FC<IProps> = ({ content, code }) => {
+const RightBody: FC<IProps> = ({ content, code, updateNext }) => {
   const [time, setTime] = useState(0) // time 时间后动画结束
   const [codeList, setCodeList] = useState<objType[]>([]) // time 时间后动画结束
   const [messageApi, contextHolder] = message.useMessage()
@@ -77,7 +78,9 @@ const RightBody: FC<IProps> = ({ content, code }) => {
     }
   }, [code, setCodeList, time])
   useEffect(() => {
-    console.log(codeList)
+    if(codeList.length!==0){
+      updateNext(false)
+    }
   }, [codeList])
   return (<>
     {contextHolder}
@@ -96,9 +99,10 @@ const RightBody: FC<IProps> = ({ content, code }) => {
         <div className={s.code}>
           {
             codeList.length !== 0 && codeList.map((item, index) => {
-              return <span key={index} style={{ color: item.color }}>{item.content} </span>
+              return <span key={index} style={{ color: item.color }}>{item.content}</span>
             })
           }
+          <br />
         </div> : <div className={s.uncode}>
           <div>正在加载</div>
           <span className={s.loadingdotscontainer}>

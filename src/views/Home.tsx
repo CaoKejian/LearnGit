@@ -17,6 +17,13 @@ interface IProps {
 const Home: FC<IProps> = () => {
   const [editorTheme, setEditorTheme] = useState('day')
   const [defaultSwitch, setDefaultSwitch] = useState<boolean>(true)
+  const [next, setNext] = useState<boolean>(true) // 控制下一步
+
+  /* 控制下一步 */
+  const updateNext = (isNext: boolean) => {
+    isNext && setNext(true)
+    !isNext && setNext(false)
+  }
 
   const changeTheme = (e: boolean) => {
     setDefaultSwitch(!defaultSwitch)
@@ -64,7 +71,7 @@ const Home: FC<IProps> = () => {
         className={s.switchModal}
         checkedChildren={<svg className={s.svgDay}><use xlinkHref='#day'></use></svg>}
         unCheckedChildren={<svg className={s.svgDark}><use xlinkHref='#dark'></use></svg>}
-        checked={defaultSwitch} 
+        checked={defaultSwitch}
         onClick={(e) => changeTheme(e)}
       />
     </div>
@@ -76,10 +83,10 @@ const Home: FC<IProps> = () => {
       </div>
       <div className={s.right}>
         <div className={s.right_top}>
-          <RightBody content={content} code={code} />
+          <RightBody content={content} code={code} updateNext={updateNext}/>
         </div>
         <div className={s.right_bottom}>
-          <Editor editorTheme={editorTheme} />
+          <Editor editorTheme={editorTheme} next={next} updateNext={updateNext}/>
         </div>
       </div>
     </div>
