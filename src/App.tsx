@@ -23,8 +23,14 @@ function App() {
     const theme = JSON.parse(localStorage.getItem('git_theme') as string)
     if(theme){
       switchTheme('day')
+      import('./theme').then(res=>{
+        setTheme(res.dayTheme)
+      })
     }else{
       switchTheme('dark')
+      import('./theme').then(res=>{
+        setTheme(res.darkTheme)
+      })
     }
   },[])
   const doSomething = (e:Boolean) => {
@@ -33,7 +39,6 @@ function App() {
       import('./theme').then(res=>{
         setTheme(res.darkTheme)
       })
-      console.log(theme)
     }else{
       switchTheme('day')
       import('./theme').then(res=>{

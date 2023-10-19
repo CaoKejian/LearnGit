@@ -33,7 +33,7 @@ export const darkTheme = {
     Button:{
       colorPrimaryHover: '#3e8297',
       textHoverBg: '#000000',
-      defaultBg:'#000000',
+      defaultBg:'#1e1e1e',
       defaultColor:'#ffffff',
       defaultBorderColor:'#1e1e1e',
     }

@@ -27,7 +27,7 @@ const Footer: FC<IProps> = ({ addList }) => {
   }
   return (
     <div className={s.footer}>
-      <Button onClick={click}>新的聊天</Button>
+      <Button  onClick={click}>新的聊天</Button>
       <Modal
         open={open}
         title="新的聊天"
