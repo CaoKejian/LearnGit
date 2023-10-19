@@ -38,16 +38,33 @@ const Home: FC<IProps> = () => {
   }
   const { doSomething } = React.useContext(AppContext)
 
+  /* 控制列表增添 */
   const [chatList, setChatList] = useState<chatListType[]>([])
+  useEffect(() => {
+    const LocalList = JSON.parse(localStorage.getItem('chatList') as string)
+    if(!LocalList) return
+    setChatList(LocalList)
+  },[])
+  useEffect(() => {
+    localStorage.setItem('chatList', JSON.stringify(chatList))
+  }, [chatList])
+
+  /* 控制列表的index */
+  const [curIndex, setCurIndex] = useState(0)
+  const changeIndex = (index:number) => {
+    setCurIndex(index)
+    localStorage.setItem('chatlist_index', JSON.stringify(index))
+  }
+  useEffect(() => {
+    setCurIndex(JSON.parse(localStorage.getItem('chatlist_index') as string))
+  }, [])
+
   useEffect(() => {
     const theme = JSON.parse(localStorage.getItem('git_theme') as string)
     if (!theme) {
       setDefaultSwitch(false)
       setEditorTheme('dark')
     }
-    setChatList([
-      { id: 1, name: '123', time: '2023-10-19' },
-    ])
   }, [defaultSwitch])
   const content = '欢迎来到小丽（机器人）的对话。让小丽来教你学习Git并开启新的旅程吧~'
   const code = 'git ( num ) => num + 1'
@@ -79,7 +96,7 @@ const Home: FC<IProps> = () => {
     <div className={s.editor}>
       <div className={s.left}>
         <Header />
-        <Body chatList={chatList} />
+        <Body chatList={chatList} curIndex={curIndex} changeIndex={changeIndex}/>
         <Footer addList={addList} />
       </div>
       <div className={s.right}>
