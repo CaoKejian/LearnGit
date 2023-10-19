@@ -46,6 +46,7 @@ const Home: FC<IProps> = () => {
     setChatList(LocalList)
   },[])
   useEffect(() => {
+    setCurIndex(0)
     localStorage.setItem('chatList', JSON.stringify(chatList))
   }, [chatList])
 

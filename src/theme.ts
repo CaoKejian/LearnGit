@@ -36,6 +36,7 @@ export const darkTheme = {
       defaultBg:'#1e1e1e',
       defaultColor:'#ffffff',
       defaultBorderColor:'#1e1e1e',
+      borderColorDisabled: '#1e1e1e'
     }
   },
   token: {

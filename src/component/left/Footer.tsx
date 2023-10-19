@@ -42,7 +42,7 @@ const Footer: FC<IProps> = ({ addList }) => {
           <Button key="back" onClick={handleCancel}>
             取消
           </Button>,
-          <Button key="submit" type="primary" loading={loading} onClick={() => handleOk(1)}>
+          <Button key="submit" type="primary" onClick={() => handleOk(1)}>
             选择学习的模块
           </Button>,
           <Button

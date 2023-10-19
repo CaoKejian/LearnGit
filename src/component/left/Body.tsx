@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import type { FC, ReactNode } from 'react'
 import s from './Header.module.scss'
 import { chatListType } from '../type'
@@ -10,8 +10,10 @@ interface IProps {
   changeIndex: (index: number) => void
 }
 
-const Body: FC<IProps> = ({ chatList, curIndex=0, changeIndex }) => {
-
+const Body: FC<IProps> = ({ chatList, curIndex = 0, changeIndex }) => {
+  useEffect(() => {
+    console.log(curIndex)
+  }, [changeIndex])
   return (
     <div className={s.body}>
       <ul>
