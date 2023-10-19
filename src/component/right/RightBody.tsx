@@ -99,7 +99,7 @@ const RightBody: FC<IProps> = ({ content, code, updateNext }) => {
         <div className={s.code}>
           {
             codeList.length !== 0 && codeList.map((item, index) => {
-              return <span key={index} style={{ color: item.color }}>{item.content}</span>
+              return <span key={index} style={{ color: item.color }}>{item.content} </span>
             })
           }
           <br />

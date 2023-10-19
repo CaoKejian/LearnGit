@@ -10,6 +10,7 @@ import Body from '../component/left/Body'
 import { chatListType } from '../component/type'
 import RightBody from '../component/right/RightBody'
 import { Time } from '../share/Time'
+import RightTop from '../component/right/RightTop'
 
 interface IProps {
   children?: ReactNode
@@ -26,6 +27,7 @@ const Home: FC<IProps> = () => {
     !isNext && setNext(false)
   }
 
+  /* 切换主题 */
   const changeTheme = (e: boolean) => {
     setDefaultSwitch(!defaultSwitch)
     localStorage.setItem('git_theme', JSON.stringify(e))
@@ -42,24 +44,30 @@ const Home: FC<IProps> = () => {
   const [chatList, setChatList] = useState<chatListType[]>([])
   useEffect(() => {
     const LocalList = JSON.parse(localStorage.getItem('chatList') as string)
-    if(!LocalList) return
+    if (!LocalList) return
     setChatList(LocalList)
-  },[])
+    // 初始化index
+  }, [])
   useEffect(() => {
-    setCurIndex(0)
+    const localIndex = JSON.parse(localStorage.getItem('chatlist_index') as string)
+    setCurIndex(localIndex ? localIndex : 0)
     localStorage.setItem('chatList', JSON.stringify(chatList))
   }, [chatList])
 
   /* 控制列表的index */
   const [curIndex, setCurIndex] = useState(0)
-  const changeIndex = (index:number) => {
+  const changeIndex = (index: number) => {
     setCurIndex(index)
+    setObj({ code: 'git push', content: 'i am a bot欢迎来到小丽（机器人）的对话。让小丽来教你学习Git并开启新的旅程吧~' })
     localStorage.setItem('chatlist_index', JSON.stringify(index))
   }
+  /* 列表change，RightTop change */
+  const [obj, setObj] = useState<{ code: string, content: string }>({ code: '', content: '' })
   useEffect(() => {
-    setCurIndex(JSON.parse(localStorage.getItem('chatlist_index') as string))
+    setObj({ code: 'git merge master', content: '欢迎来到小丽（机器人）的对话。让小丽来教你学习Git并开启新的旅程吧~' })
   }, [])
 
+  /* 主题change */
   useEffect(() => {
     const theme = JSON.parse(localStorage.getItem('git_theme') as string)
     if (!theme) {
@@ -67,8 +75,7 @@ const Home: FC<IProps> = () => {
       setEditorTheme('dark')
     }
   }, [defaultSwitch])
-  const content = '欢迎来到小丽（机器人）的对话。让小丽来教你学习Git并开启新的旅程吧~'
-  const code = 'git ( num ) => num + 1'
+
 
   const addList = (num: number) => {
     if (num === 1) {
@@ -97,15 +104,18 @@ const Home: FC<IProps> = () => {
     <div className={s.editor}>
       <div className={s.left}>
         <Header />
-        <Body chatList={chatList} curIndex={curIndex} changeIndex={changeIndex}/>
+        <Body chatList={chatList} curIndex={curIndex} changeIndex={changeIndex} />
         <Footer addList={addList} />
       </div>
       <div className={s.right}>
-        <div className={s.right_top}>
-          <RightBody content={content} code={code} updateNext={updateNext}/>
-        </div>
+        <RightTop 
+          updateNext={updateNext} 
+          obj={obj} 
+          curIndex={curIndex}
+          chatList={chatList}
+          />
         <div className={s.right_bottom}>
-          <Editor editorTheme={editorTheme} next={next} updateNext={updateNext}/>
+          <Editor editorTheme={editorTheme} next={next} updateNext={updateNext} />
         </div>
       </div>
     </div>
