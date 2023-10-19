@@ -12,7 +12,7 @@ interface IProps {
 }
 
 const Editor: FC<IProps> = ({ editorTheme, next, updateNext }) => {
-  const [code, setCode] = useState("// 在这里编写你的代码~");
+  const [code, setCode] = useState("// 在这里编写你的代码~ || shift + Enter 为发送键哦~");
   const onChange = (e: string) => {
     setCode(e)
   }

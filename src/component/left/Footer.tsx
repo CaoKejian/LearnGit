@@ -15,6 +15,11 @@ const Footer: FC<IProps> = ({ addList }) => {
   const [open, setOpen] = useState(false);
 
   const handleOk = (num: number) => {
+    if (num === 1) {
+      setOpen(false)
+      addList(num)
+      return
+    }
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -27,7 +32,7 @@ const Footer: FC<IProps> = ({ addList }) => {
   }
   return (
     <div className={s.footer}>
-      <Button  onClick={click}>新的聊天</Button>
+      <Button onClick={click}>新的聊天</Button>
       <Modal
         open={open}
         title="新的聊天"

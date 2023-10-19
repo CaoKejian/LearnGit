@@ -9,6 +9,7 @@ import Footer from '../component/left/Footer'
 import Body from '../component/left/Body'
 import { chatListType } from '../component/type'
 import RightBody from '../component/right/RightBody'
+import { Time } from '../share/Time'
 
 interface IProps {
   children?: ReactNode
@@ -54,12 +55,12 @@ const Home: FC<IProps> = () => {
   const addList = (num: number) => {
     if (num === 1) {
       setChatList((p) => [
-        { id: 4, name: '选择一个模块', time: '2023-10-19' },
+        { id: Date.now(), name: '选择一个模块', time: Time(Date.now()) },
         ...p,
       ])
     } else {
       setChatList((p) => [
-        { id: 5, name: 'git之旅', time: '2023-10-19' },
+        { id: Date.now(), name: 'git之旅', time: Time(Date.now()) },
         ...p,
       ])
     }
