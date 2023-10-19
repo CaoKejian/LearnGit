@@ -7,10 +7,10 @@ import { AppContext } from '../share/AppContext'
 import Header from '../component/left/Header'
 import Footer from '../component/left/Footer'
 import Body from '../component/left/Body'
-import { chatListType } from '../component/type'
-import RightBody from '../component/right/RightBody'
+import { chatListType, messageType } from '../component/type'
 import { Time } from '../share/Time'
 import RightTop from '../component/right/RightTop'
+import { MockMessage } from '../share/constant'
 
 interface IProps {
   children?: ReactNode
@@ -20,11 +20,16 @@ const Home: FC<IProps> = () => {
   const [editorTheme, setEditorTheme] = useState('day')
   const [defaultSwitch, setDefaultSwitch] = useState<boolean>(true)
   const [next, setNext] = useState<boolean>(true) // 控制下一步
+  const [step, setStep] = useState(0)
 
   /* 控制下一步 */
   const updateNext = (isNext: boolean) => {
-    isNext && setNext(true)
-    !isNext && setNext(false)
+    if (isNext) {
+      setNext(true)
+      setStep(step + 1)
+    } else {
+      setNext(false)
+    }
   }
 
   /* 切换主题 */
@@ -46,7 +51,6 @@ const Home: FC<IProps> = () => {
     const LocalList = JSON.parse(localStorage.getItem('chatList') as string)
     if (!LocalList) return
     setChatList(LocalList)
-    // 初始化index
   }, [])
   useEffect(() => {
     const localIndex = JSON.parse(localStorage.getItem('chatlist_index') as string)
@@ -58,14 +62,10 @@ const Home: FC<IProps> = () => {
   const [curIndex, setCurIndex] = useState(0)
   const changeIndex = (index: number) => {
     setCurIndex(index)
-    setObj({ code: 'git push', content: 'i am a bot欢迎来到小丽（机器人）的对话。让小丽来教你学习Git并开启新的旅程吧~' })
     localStorage.setItem('chatlist_index', JSON.stringify(index))
   }
   /* 列表change，RightTop change */
-  const [obj, setObj] = useState<{ code: string, content: string }>({ code: '', content: '' })
-  useEffect(() => {
-    setObj({ code: 'git merge master', content: '欢迎来到小丽（机器人）的对话。让小丽来教你学习Git并开启新的旅程吧~' })
-  }, [])
+  const [message, setMessage] = useState<messageType[]>(MockMessage)
 
   /* 主题change */
   useEffect(() => {
@@ -75,7 +75,6 @@ const Home: FC<IProps> = () => {
       setEditorTheme('dark')
     }
   }, [defaultSwitch])
-
 
   const addList = (num: number) => {
     if (num === 1) {
@@ -108,12 +107,13 @@ const Home: FC<IProps> = () => {
         <Footer addList={addList} />
       </div>
       <div className={s.right}>
-        <RightTop 
-          updateNext={updateNext} 
-          obj={obj} 
+        <RightTop
+          updateNext={updateNext}
+          step={step}
+          message={message}
           curIndex={curIndex}
           chatList={chatList}
-          />
+        />
         <div className={s.right_bottom}>
           <Editor editorTheme={editorTheme} next={next} updateNext={updateNext} />
         </div>

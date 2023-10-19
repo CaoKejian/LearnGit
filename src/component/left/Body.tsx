@@ -12,7 +12,7 @@ interface IProps {
 
 const Body: FC<IProps> = ({ chatList, curIndex = 0, changeIndex }) => {
   useEffect(() => {
-    console.log(curIndex)
+    // console.log(curIndex)
   }, [changeIndex])
   return (
     <div className={s.body}>

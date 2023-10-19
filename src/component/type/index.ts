@@ -3,3 +3,8 @@ export interface chatListType {
   name:string,
   time:string
 }
+
+export interface messageType {
+  code: string
+  content: string
+}
