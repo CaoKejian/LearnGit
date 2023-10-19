@@ -2,18 +2,18 @@ import { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import s from './RightBody.module.scss'
 import { message } from 'antd'
+import { messageType } from '../type'
 
 interface IProps {
   children?: ReactNode
-  content: string
-  code?: string
+  item: messageType
   updateNext: (isNext: boolean) => void
 }
 interface objType {
   content: string
   color: string
 }
-const RightBody: FC<IProps> = ({ content, code, updateNext }) => {
+const RightBody: FC<IProps> = ({ item, updateNext }) => {
   const [time, setTime] = useState(0) // time 时间后动画结束
   const [codeList, setCodeList] = useState<objType[]>([]) // time 时间后动画结束
   const [messageApi, contextHolder] = message.useMessage()
@@ -47,8 +47,8 @@ const RightBody: FC<IProps> = ({ content, code, updateNext }) => {
   }
 
   useEffect(() => {
-    if (!code) return
-    const word = code.split(' ')
+    if (!item.code) return
+    const word = item.code.split(' ')
     let obj: objType[] = []
     const pushToObj = (content: string, color: string) => {
       let temp = { content: content, color: color }
@@ -76,7 +76,7 @@ const RightBody: FC<IProps> = ({ content, code, updateNext }) => {
         setCodeList(obj)
       }, time * 1000)
     }
-  }, [code, setCodeList, time])
+  }, [item.code, setCodeList, time])
   useEffect(() => {
     if(codeList.length!==0){
       updateNext(false)
@@ -92,7 +92,7 @@ const RightBody: FC<IProps> = ({ content, code, updateNext }) => {
         <span className={s.container}
           style={{ animationDelay: `${time * 1000}s` }}
         >
-          {content}
+          {item.content}
         </span>
       </div>
       {codeList?.length !== 0 ?

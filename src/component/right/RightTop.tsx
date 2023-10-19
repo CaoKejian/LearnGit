@@ -13,9 +13,9 @@ interface IProps {
 }
 
 const RightTop: FC<IProps> = ({ updateNext, message, curIndex, chatList, step }) => {
-  const [obj, setObj] = useState(message[0])
+  const [msgArr, setMsgArr] = useState([message[0]])
   useEffect(() => {
-    setObj(message[step])
+    // setObj(message[step])
   }, [step])
 
   return (
@@ -23,8 +23,13 @@ const RightTop: FC<IProps> = ({ updateNext, message, curIndex, chatList, step })
       {
         chatList.map((_item, index) => {
           if (curIndex === index) {
-            return (
-              <RightBody key={_item.id} content={obj.content} code={obj.code} updateNext={updateNext} />
+            return (<div key={_item.id}>
+              {
+                msgArr.map((item, index) => {
+                  return <RightBody key={item.content} item={item} updateNext={updateNext} />
+                })
+              }
+            </div>
             )
           }
         })
