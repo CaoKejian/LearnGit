@@ -8,17 +8,19 @@ interface IProps {
   children?: ReactNode
   item: messageType
   updateNext: (isNext: boolean) => void
+  stopAnimation: boolean
 }
 interface objType {
   content: string
   color: string
 }
-const RightBody: FC<IProps> = ({ item, updateNext }) => {
+const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
   const [time, setTime] = useState(0) // time 时间后动画结束
-  const [codeList, setCodeList] = useState<objType[]>([]) // time 时间后动画结束
+  const [codeList, setCodeList] = useState<objType[]>([])
   const [messageApi, contextHolder] = message.useMessage()
 
   useEffect(() => {
+    if (!stopAnimation) return
     const h1 = document.querySelector(`.${s.container}`)
     if (!h1) return
     const textLength = h1.textContent?.length || 0
@@ -48,7 +50,8 @@ const RightBody: FC<IProps> = ({ item, updateNext }) => {
 
   useEffect(() => {
     if (!item.code) return
-    const word = item.code.split(' ')
+    setCodeList([])
+    let word = item.code.split(' ')
     let obj: objType[] = []
     const pushToObj = (content: string, color: string) => {
       let temp = { content: content, color: color }
@@ -74,11 +77,13 @@ const RightBody: FC<IProps> = ({ item, updateNext }) => {
     if (obj.length > 0 && time !== 0) {
       setTimeout(() => {
         setCodeList(obj)
+        obj = []
+        word = []
       }, time * 1000)
     }
-  }, [item.code, setCodeList, time])
+  }, [item.code, setCodeList, time, stopAnimation])
   useEffect(() => {
-    if(codeList.length!==0){
+    if (codeList.length !== 0) {
       updateNext(false)
     }
   }, [codeList])
@@ -90,12 +95,14 @@ const RightBody: FC<IProps> = ({ item, updateNext }) => {
           <svg className={s.svg}><use xlinkHref='#bot'></use></svg>
         </div>
         <span className={s.container}
-          style={{ animationDelay: `${time * 1000}s` }}
+          style={{
+            animationDelay: `${stopAnimation ? '0s' : time * 1000 + 's'}`,
+          }}
         >
           {item.content}
         </span>
       </div>
-      {codeList?.length !== 0 ?
+      {codeList.length!==0 ?
         <div className={s.code}>
           {
             codeList.length !== 0 && codeList.map((item, index) => {

@@ -1,7 +1,6 @@
 .wrapper{
   padding: 1rem;
   box-sizing: border-box;
-  height: 2000px;
   .message{
     display: flex;
     flex-direction: column;
@@ -11,7 +10,7 @@
       border: 1px solid var(--actor-border);
       border-radius: 0.5rem;
       text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 0.5rem;
       cursor: pointer;
       background: var(--actor-bg);
       .svg{

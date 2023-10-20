@@ -13,11 +13,15 @@ interface IProps {
 }
 
 const RightTop: FC<IProps> = ({ updateNext, message, curIndex, chatList, step }) => {
-  const [msgArr, setMsgArr] = useState([message[0]])
+  const [msgArr, setMsgArr] = useState<messageType[]>([message[0]])
   useEffect(() => {
-    // setObj(message[step])
+    if(message[step] === msgArr[length]) return
+    const next = [message[step], ...msgArr]
+    setMsgArr(next)
   }, [step])
-
+  useEffect(() => {
+    console.log(msgArr)
+  }, [msgArr])
   return (
     <div className={s.right_top}>
       {
@@ -25,8 +29,8 @@ const RightTop: FC<IProps> = ({ updateNext, message, curIndex, chatList, step })
           if (curIndex === index) {
             return (<div key={_item.id}>
               {
-                msgArr.map((item, index) => {
-                  return <RightBody key={item.content} item={item} updateNext={updateNext} />
+                msgArr.map((item,index) => {
+                  return <RightBody key={index} item={item} updateNext={updateNext} stopAnimation={index === msgArr.length - 1} />
                 })
               }
             </div>
