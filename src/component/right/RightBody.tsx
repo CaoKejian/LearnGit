@@ -19,8 +19,24 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
   const [codeList, setCodeList] = useState<objType[]>([])
   const [messageApi, contextHolder] = message.useMessage()
 
+  const cancelAfter = () => {
+    const styleSheets = document.styleSheets;
+    for (let i = 0; i < styleSheets.length; i++) {
+      const styleSheet = styleSheets[i];
+      const rules = styleSheet.cssRules || styleSheet.rules;
+      if (rules) {
+        for (let j = 0; j < rules.length; j++) {
+          const rule:any = rules[j];
+          if (rule.selectorText && rule.selectorText.endsWith("::after")) {
+            rule.style.width = "0"
+            rule.style.height = "0"
+          }
+        }
+      }
+    }
+
+  }
   useEffect(() => {
-    if (!stopAnimation) return
     const h1 = document.querySelector(`.${s.container}`)
     if (!h1) return
     const textLength = h1.textContent?.length || 0
@@ -29,6 +45,7 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
       .replace(/\S/g, "<span>$&</span>")
       .replace(/\s/g, "<span>&nbsp;</span>")
     let delay = 0
+      if(!stopAnimation) cancelAfter()
     document.querySelectorAll('span').forEach((span, index) => {
       delay += 0.1
       if (index === 6) delay += 0.3
@@ -49,6 +66,7 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
   }
 
   useEffect(() => {
+    console.log(stopAnimation, item)
     if (!item.code) return
     setCodeList([])
     let word = item.code.split(' ')
@@ -81,7 +99,7 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
         word = []
       }, time * 1000)
     }
-  }, [item.code, setCodeList, time, stopAnimation])
+  }, [item, setCodeList, time, stopAnimation])
   useEffect(() => {
     if (codeList.length !== 0) {
       updateNext(false)
@@ -102,11 +120,11 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
           {item.content}
         </span>
       </div>
-      {codeList.length!==0 ?
+      {codeList.length !== 0 ?
         <div className={s.code}>
           {
             codeList.length !== 0 && codeList.map((item, index) => {
-              return <span key={index} style={{ color: item.color }}>{item.content} </span>
+              return <span key={item.content} style={{ color: item.color }}>{item.content} </span>
             })
           }
           <br />

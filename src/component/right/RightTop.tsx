@@ -21,16 +21,18 @@ const RightTop: FC<IProps> = ({ updateNext, message, curIndex, chatList, step })
   }, [step])
   useEffect(() => {
     console.log(msgArr)
+    if(chatList.length === 0) return
+    localStorage.setItem(`caht_${chatList[curIndex].id}`,JSON.stringify(msgArr))
   }, [msgArr])
   return (
     <div className={s.right_top}>
       {
         chatList.map((_item, index) => {
           if (curIndex === index) {
-            return (<div key={_item.id}>
+            return (<div key={_item.id} className={s.body_item}>
               {
                 msgArr.map((item,index) => {
-                  return <RightBody key={index} item={item} updateNext={updateNext} stopAnimation={index === msgArr.length - 1} />
+                  return <RightBody key={item.content} item={item} updateNext={updateNext} stopAnimation={index === msgArr.length - 1} />
                 })
               }
             </div>
