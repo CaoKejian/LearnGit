@@ -19,7 +19,7 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
   const [codeList, setCodeList] = useState<objType[]>([])
   const [messageApi, contextHolder] = message.useMessage()
 
-  const cancelAfter = () => {
+  const cancelAfter = (open: boolean) => {
     const styleSheets = document.styleSheets;
     for (let i = 0; i < styleSheets.length; i++) {
       const styleSheet = styleSheets[i];
@@ -28,13 +28,17 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
         for (let j = 0; j < rules.length; j++) {
           const rule:any = rules[j];
           if (rule.selectorText && rule.selectorText.endsWith("::after")) {
-            rule.style.width = "0"
-            rule.style.height = "0"
+            if(open) {
+              rule.style.width = "3px"
+              rule.style.height = "1rem"
+            }else{
+              rule.style.width = "0"
+              rule.style.height = "0"
+            }
           }
         }
       }
     }
-
   }
   useEffect(() => {
     const h1 = document.querySelector(`.${s.container}`)
@@ -45,7 +49,6 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
       .replace(/\S/g, "<span>$&</span>")
       .replace(/\s/g, "<span>&nbsp;</span>")
     let delay = 0
-      if(!stopAnimation) cancelAfter()
     document.querySelectorAll('span').forEach((span, index) => {
       delay += 0.1
       if (index === 6) delay += 0.3
@@ -68,7 +71,9 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
   useEffect(() => {
     console.log(stopAnimation, item)
     if (!item.code) return
-    setCodeList([])
+    setCodeList([]) // 初始化
+    cancelAfter(true) // 初始化
+
     let word = item.code.split(' ')
     let obj: objType[] = []
     const pushToObj = (content: string, color: string) => {
@@ -97,6 +102,7 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
         setCodeList(obj)
         obj = []
         word = []
+        cancelAfter(false)
       }, time * 1000)
     }
   }, [item, setCodeList, time, stopAnimation])
