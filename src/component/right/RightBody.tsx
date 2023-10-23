@@ -2,28 +2,50 @@ import { memo, useEffect, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import s from './RightBody.module.scss'
 import { message } from 'antd'
-import { messageType } from '../type'
+import { codeSpanType, messageType } from '../type'
+import { MockMessage } from '../../share/constant'
 
 interface IProps {
   children?: ReactNode
-  item: messageType
+  item: messageType[]
   updateNext: (isNext: boolean) => void
-  stopAnimation: boolean
   loading: boolean
   step: number
+  setLocalStorage: (item: messageType[]) => void
 }
 interface objType {
   content: string
   color: string
 }
-const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation, loading, step }) => {
-  const [msgItem, setMsgItem] = useState(item)
+const colorMap = {
+  'git': '#e18736',
+  'alpha': '#76bcf7',
+  'operator': '#e18736',
+  'singleChar': '#a5d7fd'
+}
+
+const RightBody: FC<IProps> = ({ item, updateNext, loading, step, setLocalStorage }) => {
+  const [msgArr, setMsgArr] = useState<messageType[]>(item)
   const [msgLoading, setMsgLoading] = useState(loading)
-  const [msgStopAnimation, setMsgStopAnimation] = useState(stopAnimation)
   const [time, setTime] = useState(0) // time 时间后动画结束
-  const [codeList, setCodeList] = useState<objType[]>([])
+  const [codeList, setCodeList] = useState<any>([])
   const [messageApi, contextHolder] = message.useMessage()
 
+  // 下一步
+  useEffect(() => {
+    if (MockMessage[step] === msgArr[length]) return
+    if (!MockMessage[step]) {
+      return messageApi.open({
+        type: 'warning',
+        content: '没有下一步了',
+      })
+    }
+    const next = [...msgArr, MockMessage[step]]
+    setMsgArr(next)
+    setLocalStorage(next)
+  }, [step])
+
+  // 设置伪类
   const cancelAfter = (open: boolean) => {
     const styleSheets = document.styleSheets;
     for (let i = 0; i < styleSheets.length; i++) {
@@ -45,7 +67,10 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation, loading, step 
       }
     }
   }
+  
+  // 动画函数
   useEffect(() => {
+    if(msgArr.length > 1) return
     const h1 = document.querySelector(`.${s.container}`)
     if (!h1) return
     const textLength = h1.textContent?.length || 0
@@ -64,21 +89,10 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation, loading, step 
         h1.classList.add('ended')
       }
     })
-  }, [time])
+  }, [msgArr, time])
 
-  const colorMap = {
-    'git': '#e18736',
-    'alpha': '#76bcf7',
-    'operator': '#e18736',
-    'singleChar': '#a5d7fd'
-  }
-
-  useEffect(() => {
-    if (!msgItem.code) return
-    setCodeList([]) // 初始化
-    cancelAfter(true) // 初始化
-
-    let word = msgItem.code.split(' ')
+  const createCodeList = (item: messageType) => {
+    let word = item.code.split(' ')
     let obj: objType[] = []
     const pushToObj = (content: string, color: string) => {
       let temp = { content: content, color: color }
@@ -102,21 +116,30 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation, loading, step 
       }
     }
     if (obj.length > 0 && time !== 0) {
-      if(!msgLoading){
-        setCodeList(obj)
+      if (!msgLoading) {
+        setCodeList([...codeList, obj])
         obj = []
         word = []
         cancelAfter(false)
         return
       }
       setTimeout(() => {
-        setCodeList(obj)
+        setCodeList([...codeList, obj])
         obj = []
         word = []
         cancelAfter(false)
       }, time * 1000)
     }
-  }, [msgItem, setCodeList, time, msgStopAnimation, msgLoading])
+  }
+  useEffect(() => {
+    if (msgArr.length > 0) {
+      msgArr.forEach(item => {
+        if (!item.code) return
+        cancelAfter(true); // 初始化
+        createCodeList(item);
+      });
+    }
+  }, [msgArr, setCodeList, time, msgLoading])
   useEffect(() => {
     if (codeList.length !== 0) {
       updateNext(false)
@@ -126,56 +149,40 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation, loading, step 
     {contextHolder}
     <div className={s.wrapper}>
       {
-        msgLoading ? <>
-          <div className={s.message}>
-            <div className={s.actor}>
-              <svg className={s.svg}><use xlinkHref='#bot'></use></svg>
-            </div>
-            <span className={s.container}
-              style={{
-                animationDelay: `${msgStopAnimation ? '0s' : time * 1000 + 's'}`,
-              }}
-            >
-              {msgItem.content}
-            </span>
-          </div>
-          {codeList.length !== 0 ?
-            <div className={s.code}>
-              {
-                codeList.length !== 0 && codeList.map((item, index) => {
-                  return <span key={index} style={{ color: item.color }}>{item.content} </span>
-                })
-              }
-              <br />
-            </div> : <div className={s.uncode}>
-              <div>正在加载</div>
-              <span className={s.loadingdotscontainer}>
-                <span className={s.loadingdot}></span>
-                <span className={s.loadingdot}></span>
-                <span className={s.loadingdot}></span>
+        msgArr && msgArr.length !== 0 && msgArr.map((item, index) => {
+          return <div key={index}>
+            <div className={s.message}>
+              <div className={s.actor}>
+                <svg className={s.svg}><use xlinkHref='#bot'></use></svg>
+              </div>
+              <span className={s.container}
+                style={{
+                  animationDelay: time * 1000 + 's',
+                }}
+              >
+                {item.content}
               </span>
             </div>
-          }
-        </> : <>
-          <div className={s.message}>
-            <div className={s.actor}>
-              <svg className={s.svg}><use xlinkHref='#bot'></use></svg>
-            </div>
-            <span className={s.container2}>
-              {msgItem.content}
-            </span>
-          </div>
-          <div className={s.code}>
-            {
-              codeList.length !== 0 && codeList.map((item, index) => {
-                return <span key={index} style={{ color: item.color }}>{item.content} </span>
-              })
+            {codeList[index] ?
+              <div className={s.code}>
+                {
+                  codeList[index].map((item: codeSpanType, index: number) => {
+                    return <span key={index} style={{ color: item.color }}>{item.content} </span>
+                  })
+                }
+                <br />
+              </div> : <div className={s.uncode}>
+                <div>正在加载</div>
+                <span className={s.loadingdotscontainer}>
+                  <span className={s.loadingdot}></span>
+                  <span className={s.loadingdot}></span>
+                  <span className={s.loadingdot}></span>
+                </span>
+              </div>
             }
-            <br />
           </div>
-        </>
+        })
       }
-
     </div>
   </>
 

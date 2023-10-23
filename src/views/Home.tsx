@@ -66,8 +66,6 @@ const Home: FC<IProps> = () => {
     setCurIndex(index)
     localStorage.setItem('chatlist_index', JSON.stringify(index))
   }
-  /* 列表change，RightTop change */
-  const [message, setMessage] = useState<messageType[]>(MockMessage)
 
   /* 主题change */
   useEffect(() => {
@@ -112,7 +110,6 @@ const Home: FC<IProps> = () => {
         <RightTop
           updateNext={updateNext}
           step={step}
-          messageArr={message}
           curIndex={curIndex}
           chatList={chatList}
         />

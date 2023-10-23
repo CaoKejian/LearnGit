@@ -3,59 +3,49 @@ import type { FC, ReactNode } from 'react'
 import s from './RightTop.module.scss'
 import RightBody from './RightBody'
 import { chatListType, messageType } from '../type'
-import { message } from 'antd'
+import { MockMessage } from '../../share/constant'
 
 interface IProps {
   children?: ReactNode
   updateNext: (isNext: boolean) => void
-  messageArr: messageType[]
   curIndex: number
   chatList: chatListType[]
   step: number
 }
 
-const RightTop: FC<IProps> = ({ updateNext, messageArr, curIndex, chatList, step }) => {
-  const [msgArr, setMsgArr] = useState<messageType[]>([messageArr[0]])
-  const [messageApi, contextHolder] = message.useMessage()
+const RightTop: FC<IProps> = ({ updateNext, curIndex, chatList, step }) => {
+  const [msgArr, setMsgArr] = useState<messageType[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const x= JSON.parse(localStorage.getItem(`chat_${chatList[curIndex].id}`) as string)
-    console.log('local', x)
-    setMsgArr(x)
-    if(x) setLoading(false)
-  },[])
-
-  useEffect(() => {
-    if (messageArr[step] === msgArr[length]) return
-    if (!messageArr[step]) {
-      return messageApi.open({
-        type: 'warning',
-        content: '没有下一步了',
-      })
+    const storedData = JSON.parse(localStorage.getItem(`chat_${chatList[curIndex].id}`) as string);
+    console.log('local', storedData);
+    if (storedData) {
+      setMsgArr(storedData);
+      setLoading(false);
+    } else {
+      setMsgArr([MockMessage[0]]);
+      setLoading(true);
     }
-    const next = [messageArr[step], ...msgArr]
-    setMsgArr(next)
-  }, [step])
-  useEffect(() => {
-    if (chatList.length === 0) return
-    console.log(chatList, curIndex)
-    localStorage.setItem(`chat_${chatList[curIndex].id}`, JSON.stringify(msgArr))
-  }, [msgArr])
+  }, [chatList, curIndex])
+  
+  const setLocalStorage = (item: messageType[]) => {
+    console.log(item, curIndex)
+    localStorage.setItem(`chat_${chatList[curIndex].id}`, JSON.stringify(item))
+  }
   return (<>
-    {contextHolder}
     <div className={s.right_top}>
       {
         chatList.map((_item, index) => {
           if (curIndex === index) {
-            return (<div key={_item.id} className={s.body_item}>
-              {
-                msgArr.map((item, index) => {
-                  return <RightBody key={index} item={item} updateNext={updateNext} stopAnimation={index === msgArr.length - 1} loading={loading} step={step}/>
-                })
-              }
-            </div>
-            )
+            return <RightBody
+              key={index}
+              item={msgArr}
+              updateNext={updateNext}
+              loading={loading}
+              step={step}
+              setLocalStorage={setLocalStorage}
+            />
           }
         })
       }

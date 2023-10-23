@@ -9,3 +9,8 @@ export interface messageType {
   content: string
   animation: number
 }
+
+export interface codeSpanType {
+  content: string
+  color:string
+}
