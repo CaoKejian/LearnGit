@@ -69,7 +69,6 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
   }
 
   useEffect(() => {
-    console.log(stopAnimation, item)
     if (!item.code) return
     setCodeList([]) // 初始化
     cancelAfter(true) // 初始化

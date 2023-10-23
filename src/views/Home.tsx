@@ -46,7 +46,7 @@ const Home: FC<IProps> = () => {
   const { doSomething } = React.useContext(AppContext)
 
   /* 控制列表增添 */
-  const [chatList, setChatList] = useState<chatListType[]>([])
+  const [chatList, setChatList] = useState<chatListType[]>([{ id: Date.now(), name: 'git之旅', time: Time(Date.now()) }])
   useEffect(() => {
     const LocalList = JSON.parse(localStorage.getItem('chatList') as string)
     if (!LocalList) return
@@ -55,6 +55,7 @@ const Home: FC<IProps> = () => {
   useEffect(() => {
     const localIndex = JSON.parse(localStorage.getItem('chatlist_index') as string)
     setCurIndex(localIndex ? localIndex : 0)
+    if(chatList.length === 0) return
     localStorage.setItem('chatList', JSON.stringify(chatList))
   }, [chatList])
 
@@ -110,7 +111,7 @@ const Home: FC<IProps> = () => {
         <RightTop
           updateNext={updateNext}
           step={step}
-          message={message}
+          messageArr={message}
           curIndex={curIndex}
           chatList={chatList}
         />

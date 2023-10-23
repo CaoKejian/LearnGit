@@ -7,4 +7,5 @@ export interface chatListType {
 export interface messageType {
   code: string
   content: string
+  animation: number
 }
