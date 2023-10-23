@@ -7,10 +7,9 @@ import { AppContext } from '../share/AppContext'
 import Header from '../component/left/Header'
 import Footer from '../component/left/Footer'
 import Body from '../component/left/Body'
-import { chatListType, messageType } from '../component/type'
+import { chatListType } from '../component/type'
 import { Time } from '../share/Time'
 import RightTop from '../component/right/RightTop'
-import { MockMessage } from '../share/constant'
 
 interface IProps {
   children?: ReactNode
@@ -82,11 +81,13 @@ const Home: FC<IProps> = () => {
         { id: chatList.length, name: '选择一个模块', time: Time(Date.now()) },
         ...p,
       ])
+      setCurIndex(0)
     } else {
       setChatList((p) => [
         { id: chatList.length, name: 'git之旅', time: Time(Date.now()) },
         ...p,
       ])
+      setCurIndex(0)
     }
   }
   return (<div className={s.wrapper}>

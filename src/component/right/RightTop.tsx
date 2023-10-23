@@ -15,22 +15,19 @@ interface IProps {
 
 const RightTop: FC<IProps> = ({ updateNext, curIndex, chatList, step }) => {
   const [msgArr, setMsgArr] = useState<messageType[]>([])
-  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem(`chat_${chatList[curIndex].id}`) as string);
-    console.log('local', storedData);
+    console.log(curIndex)
+    const storedData = JSON.parse(localStorage.getItem(`chat_${chatList[curIndex].id}`) as string)
     if (storedData) {
-      setMsgArr(storedData);
-      setLoading(false);
+      setMsgArr(storedData)
     } else {
-      setMsgArr([MockMessage[0]]);
-      setLoading(true);
+      setMsgArr([MockMessage[0]])
     }
   }, [chatList, curIndex])
   
   const setLocalStorage = (item: messageType[]) => {
-    console.log(item, curIndex)
+    console.log(item)
     localStorage.setItem(`chat_${chatList[curIndex].id}`, JSON.stringify(item))
   }
   return (<>
@@ -39,10 +36,9 @@ const RightTop: FC<IProps> = ({ updateNext, curIndex, chatList, step }) => {
         chatList.map((_item, index) => {
           if (curIndex === index) {
             return <RightBody
-              key={index}
+              key={_item.id}
               item={msgArr}
               updateNext={updateNext}
-              loading={loading}
               step={step}
               setLocalStorage={setLocalStorage}
             />

@@ -9,7 +9,6 @@ interface IProps {
   children?: ReactNode
   item: messageType[]
   updateNext: (isNext: boolean) => void
-  loading: boolean
   step: number
   setLocalStorage: (item: messageType[]) => void
 }
@@ -24,13 +23,11 @@ const colorMap = {
   'singleChar': '#a5d7fd'
 }
 
-const RightBody: FC<IProps> = ({ item, updateNext, loading, step, setLocalStorage }) => {
+const RightBody: FC<IProps> = ({ item, updateNext, step, setLocalStorage }) => {
   const [msgArr, setMsgArr] = useState<messageType[]>(item)
-  const [msgLoading, setMsgLoading] = useState(loading)
   const [time, setTime] = useState(0) // time 时间后动画结束
   const [codeList, setCodeList] = useState<any>([])
   const [messageApi, contextHolder] = message.useMessage()
-
   // 下一步
   useEffect(() => {
     if (MockMessage[step] === msgArr[length]) return
@@ -41,10 +38,16 @@ const RightBody: FC<IProps> = ({ item, updateNext, loading, step, setLocalStorag
       })
     }
     const next = [...msgArr, MockMessage[step]]
-    setMsgArr(next)
-    setLocalStorage(next)
+    setMsgArr(next);
   }, [step])
-
+  useEffect(() => {
+    if (item.length !== 0) {
+      setMsgArr(item)
+    }
+    if (step !== 0) {
+      setLocalStorage(msgArr)
+    }
+  }, [msgArr]);
   // 设置伪类
   const cancelAfter = (open: boolean) => {
     const styleSheets = document.styleSheets;
@@ -67,10 +70,10 @@ const RightBody: FC<IProps> = ({ item, updateNext, loading, step, setLocalStorag
       }
     }
   }
-  
+
   // 动画函数
   useEffect(() => {
-    if(msgArr.length > 1) return
+    if (msgArr.length > 1 || msgArr.length === 0) return
     const h1 = document.querySelector(`.${s.container}`)
     if (!h1) return
     const textLength = h1.textContent?.length || 0
@@ -115,14 +118,7 @@ const RightBody: FC<IProps> = ({ item, updateNext, loading, step, setLocalStorag
         })
       }
     }
-    if (obj.length > 0 && time !== 0) {
-      if (!msgLoading) {
-        setCodeList([...codeList, obj])
-        obj = []
-        word = []
-        cancelAfter(false)
-        return
-      }
+    if (obj.length > 0) {
       setTimeout(() => {
         setCodeList([...codeList, obj])
         obj = []
@@ -139,7 +135,7 @@ const RightBody: FC<IProps> = ({ item, updateNext, loading, step, setLocalStorag
         createCodeList(item);
       });
     }
-  }, [msgArr, setCodeList, time, msgLoading])
+  }, [msgArr, setCodeList, time])
   useEffect(() => {
     if (codeList.length !== 0) {
       updateNext(false)
@@ -155,11 +151,7 @@ const RightBody: FC<IProps> = ({ item, updateNext, loading, step, setLocalStorag
               <div className={s.actor}>
                 <svg className={s.svg}><use xlinkHref='#bot'></use></svg>
               </div>
-              <span className={s.container}
-                style={{
-                  animationDelay: time * 1000 + 's',
-                }}
-              >
+              <span className={s.container}>
                 {item.content}
               </span>
             </div>
