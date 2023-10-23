@@ -58,6 +58,20 @@
     animation-delay: var(--delay);
   }
 }
+.container2{
+  font-size: 1rem;
+  margin: 0;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  font-family: monospace;
+  font-weight: normal;
+  position: relative;
+  width: 65%;
+  word-wrap: break-word;
+  background: var(--message-bg);
+  border: 1px solid var(--message-border);
+  border-radius: 0.5rem;
+}
 @keyframes cursor {
   from {
     opacity: 0;

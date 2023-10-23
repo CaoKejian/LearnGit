@@ -46,7 +46,8 @@ const Home: FC<IProps> = () => {
   const { doSomething } = React.useContext(AppContext)
 
   /* 控制列表增添 */
-  const [chatList, setChatList] = useState<chatListType[]>([{ id: Date.now(), name: 'git之旅', time: Time(Date.now()) }])
+  const initialChatList: chatListType[] = [{ id: 0, name: 'git之旅', time: Time(Date.now()) }];
+  const [chatList, setChatList] = useState<chatListType[]>(initialChatList)
   useEffect(() => {
     const LocalList = JSON.parse(localStorage.getItem('chatList') as string)
     if (!LocalList) return
@@ -80,12 +81,12 @@ const Home: FC<IProps> = () => {
   const addList = (num: number) => {
     if (num === 1) {
       setChatList((p) => [
-        { id: Date.now(), name: '选择一个模块', time: Time(Date.now()) },
+        { id: chatList.length, name: '选择一个模块', time: Time(Date.now()) },
         ...p,
       ])
     } else {
       setChatList((p) => [
-        { id: Date.now(), name: 'git之旅', time: Time(Date.now()) },
+        { id: chatList.length, name: 'git之旅', time: Time(Date.now()) },
         ...p,
       ])
     }

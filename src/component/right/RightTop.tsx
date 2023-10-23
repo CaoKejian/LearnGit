@@ -17,6 +17,14 @@ interface IProps {
 const RightTop: FC<IProps> = ({ updateNext, messageArr, curIndex, chatList, step }) => {
   const [msgArr, setMsgArr] = useState<messageType[]>([messageArr[0]])
   const [messageApi, contextHolder] = message.useMessage()
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const x= JSON.parse(localStorage.getItem(`chat_${chatList[curIndex].id}`) as string)
+    console.log('local', x)
+    setMsgArr(x)
+    if(x) setLoading(false)
+  },[])
 
   useEffect(() => {
     if (messageArr[step] === msgArr[length]) return
@@ -32,7 +40,7 @@ const RightTop: FC<IProps> = ({ updateNext, messageArr, curIndex, chatList, step
   useEffect(() => {
     if (chatList.length === 0) return
     console.log(chatList, curIndex)
-    localStorage.setItem(`caht_${chatList[curIndex].id}`, JSON.stringify(msgArr))
+    localStorage.setItem(`chat_${chatList[curIndex].id}`, JSON.stringify(msgArr))
   }, [msgArr])
   return (<>
     {contextHolder}
@@ -43,7 +51,7 @@ const RightTop: FC<IProps> = ({ updateNext, messageArr, curIndex, chatList, step
             return (<div key={_item.id} className={s.body_item}>
               {
                 msgArr.map((item, index) => {
-                  return <RightBody key={item.content} item={item} updateNext={updateNext} stopAnimation={index === msgArr.length - 1} />
+                  return <RightBody key={index} item={item} updateNext={updateNext} stopAnimation={index === msgArr.length - 1} loading={loading} step={step}/>
                 })
               }
             </div>

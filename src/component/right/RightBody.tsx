@@ -9,12 +9,17 @@ interface IProps {
   item: messageType
   updateNext: (isNext: boolean) => void
   stopAnimation: boolean
+  loading: boolean
+  step: number
 }
 interface objType {
   content: string
   color: string
 }
-const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
+const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation, loading, step }) => {
+  const [msgItem, setMsgItem] = useState(item)
+  const [msgLoading, setMsgLoading] = useState(loading)
+  const [msgStopAnimation, setMsgStopAnimation] = useState(stopAnimation)
   const [time, setTime] = useState(0) // time 时间后动画结束
   const [codeList, setCodeList] = useState<objType[]>([])
   const [messageApi, contextHolder] = message.useMessage()
@@ -26,12 +31,12 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
       const rules = styleSheet.cssRules || styleSheet.rules;
       if (rules) {
         for (let j = 0; j < rules.length; j++) {
-          const rule:any = rules[j];
+          const rule: any = rules[j];
           if (rule.selectorText && rule.selectorText.endsWith("::after")) {
-            if(open) {
+            if (open) {
               rule.style.width = "3px"
               rule.style.height = "1rem"
-            }else{
+            } else {
               rule.style.width = "0"
               rule.style.height = "0"
             }
@@ -69,11 +74,11 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
   }
 
   useEffect(() => {
-    if (!item.code) return
+    if (!msgItem.code) return
     setCodeList([]) // 初始化
     cancelAfter(true) // 初始化
 
-    let word = item.code.split(' ')
+    let word = msgItem.code.split(' ')
     let obj: objType[] = []
     const pushToObj = (content: string, color: string) => {
       let temp = { content: content, color: color }
@@ -97,6 +102,13 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
       }
     }
     if (obj.length > 0 && time !== 0) {
+      if(!msgLoading){
+        setCodeList(obj)
+        obj = []
+        word = []
+        cancelAfter(false)
+        return
+      }
       setTimeout(() => {
         setCodeList(obj)
         obj = []
@@ -104,7 +116,7 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
         cancelAfter(false)
       }, time * 1000)
     }
-  }, [item, setCodeList, time, stopAnimation])
+  }, [msgItem, setCodeList, time, msgStopAnimation, msgLoading])
   useEffect(() => {
     if (codeList.length !== 0) {
       updateNext(false)
@@ -113,35 +125,57 @@ const RightBody: FC<IProps> = ({ item, updateNext, stopAnimation }) => {
   return (<>
     {contextHolder}
     <div className={s.wrapper}>
-      <div className={s.message}>
-        <div className={s.actor}>
-          <svg className={s.svg}><use xlinkHref='#bot'></use></svg>
-        </div>
-        <span className={s.container}
-          style={{
-            animationDelay: `${stopAnimation ? '0s' : time * 1000 + 's'}`,
-          }}
-        >
-          {item.content}
-        </span>
-      </div>
-      {codeList.length !== 0 ?
-        <div className={s.code}>
-          {
-            codeList.length !== 0 && codeList.map((item, index) => {
-              return <span key={item.content} style={{ color: item.color }}>{item.content} </span>
-            })
+      {
+        msgLoading ? <>
+          <div className={s.message}>
+            <div className={s.actor}>
+              <svg className={s.svg}><use xlinkHref='#bot'></use></svg>
+            </div>
+            <span className={s.container}
+              style={{
+                animationDelay: `${msgStopAnimation ? '0s' : time * 1000 + 's'}`,
+              }}
+            >
+              {msgItem.content}
+            </span>
+          </div>
+          {codeList.length !== 0 ?
+            <div className={s.code}>
+              {
+                codeList.length !== 0 && codeList.map((item, index) => {
+                  return <span key={index} style={{ color: item.color }}>{item.content} </span>
+                })
+              }
+              <br />
+            </div> : <div className={s.uncode}>
+              <div>正在加载</div>
+              <span className={s.loadingdotscontainer}>
+                <span className={s.loadingdot}></span>
+                <span className={s.loadingdot}></span>
+                <span className={s.loadingdot}></span>
+              </span>
+            </div>
           }
-          <br />
-        </div> : <div className={s.uncode}>
-          <div>正在加载</div>
-          <span className={s.loadingdotscontainer}>
-            <span className={s.loadingdot}></span>
-            <span className={s.loadingdot}></span>
-            <span className={s.loadingdot}></span>
-          </span>
-        </div>
+        </> : <>
+          <div className={s.message}>
+            <div className={s.actor}>
+              <svg className={s.svg}><use xlinkHref='#bot'></use></svg>
+            </div>
+            <span className={s.container2}>
+              {msgItem.content}
+            </span>
+          </div>
+          <div className={s.code}>
+            {
+              codeList.length !== 0 && codeList.map((item, index) => {
+                return <span key={index} style={{ color: item.color }}>{item.content} </span>
+              })
+            }
+            <br />
+          </div>
+        </>
       }
+
     </div>
   </>
 
