@@ -1,9 +1,11 @@
-import { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useRef, useState } from 'react'
 import type { FC, ReactNode } from 'react'
 import s from './RightBody.module.scss'
 import { message } from 'antd'
 import { codeSpanType, messageType } from '../type'
 import { MockMessage } from '../../share/constant'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github-dark.css';
 
 interface IProps {
   children?: ReactNode
@@ -118,7 +120,7 @@ const RightBody: FC<IProps> = ({ item, updateNext, step, setLocalStorage }) => {
         })
       }
     }
-    if (obj.length > 0) {
+    if (obj.length > 0 && time > 0) {
       setTimeout(() => {
         setCodeList([...codeList, obj])
         obj = []
@@ -133,14 +135,19 @@ const RightBody: FC<IProps> = ({ item, updateNext, step, setLocalStorage }) => {
         if (!item.code) return
         cancelAfter(true); // 初始化
         createCodeList(item);
+
       });
     }
   }, [msgArr, setCodeList, time])
+  const codeRef = useRef(null)
   useEffect(() => {
     if (codeList.length !== 0) {
       updateNext(false)
+      if (!codeRef.current) return
+      hljs.highlightBlock(codeRef.current);
     }
   }, [codeList])
+
   return (<>
     {contextHolder}
     <div className={s.wrapper}>
@@ -157,9 +164,14 @@ const RightBody: FC<IProps> = ({ item, updateNext, step, setLocalStorage }) => {
             </div>
             {codeList[index] ?
               <div className={s.code}>
+                <pre>
+                  <code ref={codeRef}>
+                    {item.code}
+                  </code>
+                </pre>
                 {
                   codeList[index].map((item: codeSpanType, index: number) => {
-                    return <span key={index} style={{ color: item.color }}>{item.content} </span>
+                    return <span key={index} style={{ color: item.color, display: 'none' }}>{item.content} </span>
                   })
                 }
                 <br />
